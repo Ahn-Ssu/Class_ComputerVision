@@ -11,7 +11,7 @@ int main(){
     Mat srcImg;
 
     // require 1, Read an image “lena.png”
-    srcImg = imread("Lena.png", 1);         
+    srcImg = imread("Lena.png", 0);         
     Mat negative_img, log_img, gamma_img;
     
     
@@ -22,7 +22,7 @@ int main(){
     imshow("Original", srcImg);
     subtract(negative_img, srcImg, negative_img);
 
-    imshow("sub", negative_img);
+    imshow("Negative", negative_img);
 
     // require 3, Log transformation (Result mat: log_img)
     log_img = srcImg.clone();
@@ -40,9 +40,10 @@ int main(){
     gamma_img = srcImg.clone();
 
     gamma_img.convertTo(gamma_img, CV_32F);
+    normalize(gamma_img, gamma_img, 0, 1, NORM_MINMAX);
     pow(gamma_img, 0.5, gamma_img);
     gamma_img = gamma_img * constant;
-    // normalize(gamma_img, gamma_img, 0, L, NORM_MINMAX);
+    normalize(gamma_img, gamma_img, 0, L, NORM_MINMAX);
     gamma_img.convertTo(gamma_img, CV_8UC3);
 
     imshow("gamma", gamma_img);
