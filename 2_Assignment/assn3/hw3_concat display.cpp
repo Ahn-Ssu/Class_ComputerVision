@@ -48,11 +48,11 @@ int main(){
 
     imshow("lena", lenaImg);
     imshow("lena_filtered", lenaLeft);
-    imshow("lena half", lenaConcat);
+    imshow("lena concat", lenaConcat);
 
     imshow("moon", moonImg);
     imshow("moon_filetered", moonRight);
-    imshow("moon half", moonConcat);
+    imshow("moon concat", moonConcat);
 
     imshow("saltnpepper", saltnPepperImg);
     imshow("saltnpepper_filtered", saltFilterd);
