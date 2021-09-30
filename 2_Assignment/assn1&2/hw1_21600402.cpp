@@ -10,7 +10,7 @@ int main(){
 
     // require 1,  Read a video “background.mp4”
     // check if file exists. if none program ends
-    if( cap.open("background.mp4")==0){ 
+    if( cap.open("/Users/ahnssu/git/Class_ComputerVision/2_Assignment/assn1&2/src/background.mp4")==0){ 
         cout << "no such file!" << endl;
         waitKey(0);
         exit(0);
@@ -21,6 +21,7 @@ int main(){
     int delay = int(1000/fps); //msec
 
     while (1) {
+        cout << "Frames: " <<cap.get(CAP_PROP_POS_FRAMES)   << "/" << total_frames << endl;
         cap >> frame;
 
         if( frame.empty()){
@@ -32,7 +33,6 @@ int main(){
         if ( cap.get(CAP_PROP_POS_MSEC)>=3000) break;   
 
         // require 4, Print out the number of the current frame and the total number of frames
-        cout << "Frames: " <<cap.get(CAP_PROP_POS_FRAMES)   << "/" << total_frames << endl;
         
         imshow("video", frame);
         waitKey(delay);   // require 3, Find out the proper input parameter for waitKey()
