@@ -148,7 +148,11 @@ Mat HistogramEqualization(Mat src){
     cvtColor(histoEq, histoEq, CV_BGR2HSV);
     split(histoEq, HSV);
 
-    equalizeHist(HSV[2], HSV[2]);
+    equalizeHist(HSV[2
+    
+    
+    
+    ], HSV[2]);
 
     merge(HSV, histoEq);
     cvtColor(histoEq, histoEq, CV_HSV2BGR);
@@ -196,15 +200,9 @@ Mat conversionColor(Mat src){
         h = HSV[0].ptr<uchar>(j);
         s = HSV[1].ptr<uchar>(j);
         for (int i = 0; i < cvt.cols;i++){
-            //  cout <<"before : " << int(h[i]) << endl;
             
             if (h[i] > 129) h[i] = h[i] - 129;
             else h[i] += 50;
-            //  cout << "After : " << int(h[i]) << endl; 
-
-            // if(h[i] > 255){ cout << h[i] << endl; h[i] = 255;}
-            // if(h[i] < 0){ cout << h[i] << endl;  h[i] = 0;}
-
         }
     }
 
