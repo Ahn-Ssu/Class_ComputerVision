@@ -6,8 +6,8 @@ using namespace cv;
 using namespace std;
 
 int main(){
-    Mat image = imread("/Users/ahnssu/git/Class_ComputerVision/Lena.png");
-    Rect rect(100, 30, 250, 300);
+    Mat image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/Lena.png");
+    Rect rect( 76, 76, 250, 300);
     Mat rect_roi = image(rect);
     imshow("rectROI", rect_roi);
     waitKey(0);

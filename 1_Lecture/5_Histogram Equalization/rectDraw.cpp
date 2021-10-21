@@ -6,7 +6,7 @@ using namespace cv;
 using namespace std;
 
 int main(){
-    Mat image = imread("/Users/ahnssu/git/Class_ComputerVision/Lena.png", 1);
+    Mat image = imread("/Users/ahn_ssu/git/Class_ComputerVision/Lena.png", 1);
     if ( !image.data) exit(1); //Check image
     
     Rect rect = Rect(10, 10, 100, 100);

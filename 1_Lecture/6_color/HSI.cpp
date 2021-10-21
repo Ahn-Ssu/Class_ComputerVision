@@ -6,7 +6,7 @@ using namespace cv;
 using namespace std;
 
 int main(){
-    Mat image = imread("/Users/ahnssu/git/Class_ComputerVision/2_Assignment/assn1&2/src/Lena.png");
+    Mat image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/colorful.jpg");
     Mat HSV, intensity_change, mask_out, change_color;
     vector<Mat> ic(3);
     vector<Mat> mo(3);

@@ -11,7 +11,7 @@ int main(){
     Mat srcImg;
 
     // require 1, Read an image “lena.png”
-    srcImg = imread("Lena.png",0);         
+    srcImg = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/exam1.png",0);         
     Mat negative_img, log_img, gamma_img;
     
     imshow("Original", srcImg);

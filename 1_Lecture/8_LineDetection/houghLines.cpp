@@ -6,12 +6,12 @@ using namespace cv;
 using namespace std;
 
 int main(){
-    Mat imgae, edge, result;
+    Mat image, edge, result;
     float rho, theta, a, b, x0, y0;
     Point p1, p2;
     vector <Vec2f> lines;
 
-    image = imread("/Users/ahnssu/git/Class_ComputerVision/2_Assignment/assn1&2/src/Lena.png");
+    image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/moon.png");
     result = image.clone();
 
     cvtColor(image, image, CV_BGR2GRAY);

@@ -17,10 +17,12 @@ int main(){
     imshow("after convertTo", after_convertTo);
 
     convertScaleAbs(img, after_convertScaleAbs, 2, 3);
-    imshow("after convertScaleAbs", after_convertScaleAbs);
+    imshow("after convertScaleAbs", after_convertScaleAbs); // 이거 기본적으로 8bit로 스케일 해줌 
 
     img.setTo(Scalar(0));
     imshow("after setTo", img);
+
+    // img.copyTo()
 
     waitKey(0);
 

@@ -10,7 +10,10 @@ int main(){
     Mat m1 = (Mat_ < double >(3, 3) << 1,2,3,4,5,6,7,8,9);
 
     Mat m_shallow = m1;
-    Mat m_deep = m1.clone();
+    // Mat m_deep = m1.clone();
+    Mat m_deep;
+    m1.copyTo(m_deep);
+    
 
 
     cout << "m1= \n" << m1 << endl << endl;

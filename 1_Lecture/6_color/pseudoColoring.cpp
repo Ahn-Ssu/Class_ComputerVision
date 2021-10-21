@@ -6,10 +6,10 @@ using namespace cv;
 using namespace std;
 
 int main(){
-    Mat gray = imread("/Users/ahnssu/git/Class_ComputerVision/2_Assignment/assn1&2/src/Lena.png", 0);
+    Mat gray = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/moon.png", 0);
     Mat color;
 
-    applyColorMap(gray, color, COLORMAP_JET);
+    applyColorMap(gray, color, COLORMAP_OCEAN);
 
 
     imshow("Input image", gray);

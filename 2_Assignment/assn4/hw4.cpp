@@ -12,7 +12,7 @@ int main(){
     Mat img_graph, hist_graph, hist_graph8;
 
     // Read an image "moon.png" as gray scale image
-    image = imread("/Users/ahnssu/git/Class_ComputerVision/src/moon.png", 0);
+    image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/exam1.png", 0);
     if ( !image.data) exit(1); //Check image
     
     // Perform histogram equalization on the input image
