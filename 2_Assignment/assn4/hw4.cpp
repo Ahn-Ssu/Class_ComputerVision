@@ -12,7 +12,7 @@ int main(){
     Mat img_graph, hist_graph, hist_graph8;
 
     // Read an image "moon.png" as gray scale image
-    image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/exam1.png", 0);
+    image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/finger_print.png", 0);
     if ( !image.data) exit(1); //Check image
     
     // Perform histogram equalization on the input image
@@ -20,32 +20,32 @@ int main(){
 
     // Display each image with the window name as “before”, “after”
     imshow("before", image);
-    imshow("after", hist_equalized_image);
+    // imshow("after", hist_equalized_image);
 
     // Display each histogram of the input and the result image
     // Set the number of bins to 16
-    img_graph = drawHistogram(image, 16);
-    hist_graph = drawHistogram(hist_equalized_image, 16);
+    img_graph = drawHistogram(image, 256);
+    // hist_graph = drawHistogram(hist_equalized_image, 16);
 
     // Display each image with the window name as “h1”, “h2”
-    imshow("h1", img_graph);
-    imshow("h2", hist_graph);
+    imshow("input histo, range[0-255]", img_graph);
+    // imshow("h2", hist_graph);
 
     // Compute the value of each component of a normalized histogram of the input image;
     // write all values on the input image; and display the result
-    hist_graph8 = histNorm(image, 8);
+    hist_graph8 = histNorm(image, -1);
 
-    for(int iter=0; iter < 8 ; iter++)
-        putText(image, 
-                format("bin %d : %f",iter, hist_graph8.at<float>(iter)), 
-                Point(50,80 + 30*iter), 
-                FONT_HERSHEY_SIMPLEX, 
-                0.5, 
-                Scalar(1, 1, 1), 
-                1,
-                CV_AA);
+    // for(int iter=0; iter < 8 ; iter++)
+    //     putText(image, 
+    //             format("bin %d : %f",iter, hist_graph8.at<float>(iter)), 
+    //             Point(50,80 + 30*iter), 
+    //             FONT_HERSHEY_SIMPLEX, 
+    //             0.5, 
+    //             Scalar(1, 1, 1), 
+    //             1,
+    //             CV_AA);
 
-    imshow("c val", image);
+    // imshow("c val", image);
 
 
 
@@ -83,6 +83,7 @@ Mat drawHistogram(Mat src, int bin=-1){
                     Scalar(0,0,0), 
                     -1);
     }
+    // rectangle(histimage, Point(hist_w/2, hist_h), Point(hist_w/2, 0), Scalar(0,0,255), -1);
 
     return histimage;
 }
