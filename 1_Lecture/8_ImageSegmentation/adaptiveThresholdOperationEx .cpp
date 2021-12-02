@@ -7,7 +7,7 @@ using namespace std;
 
 int main(){
 
-    Mat image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/Lena.png");
+    Mat image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/faceCapture.png");
     cvtColor(image, image, CV_BGR2GRAY);
 
     Mat dst;

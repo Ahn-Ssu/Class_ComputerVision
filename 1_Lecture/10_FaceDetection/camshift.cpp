@@ -48,7 +48,7 @@ void onMouse(int event, int x, int y, int flags, void* param){
     }
 }
 int main(int argc, char *argv[]){
-    VideoCapture cap(0);
+    VideoCapture cap("/Users/ahn_ssu/git/Class_ComputerVision/src/Faces.mp4");
     CallbackParam param;
     Mat frame, m_backproj, hsv;
     Mat m_model3d;
@@ -90,6 +90,7 @@ int main(int argc, char *argv[]){
             Rect rc = param.roi;
             Mat mask = Mat::zeros(rc.height, rc.width, CV_8U);
             ellipse(mask, Point(rc.width/2, rc.height/2), Size( rc.width / 2, rc.height/2), 0,0,360,255, CV_FILLED);
+            
             Mat roi(hsv, rc);
             calcHist(&roi, 1, channels, mask, m_model3d, 3, hist_sizes, ranges);
             m_rc = rc;

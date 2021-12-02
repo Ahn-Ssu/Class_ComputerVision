@@ -7,6 +7,7 @@ using namespace std;
 int main()
 {
     CascadeClassifier face_classifier;
+    Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorMOG2();
     Mat frame, grayframe;
     Mat storm_frame;
     vector<Rect> faces;
@@ -38,6 +39,7 @@ int main()
         storm_cap >> storm_frame;
 
         // resize(frame, frame, Size(640, 360));
+        resize(frame, frame, Size(960, 480));
         
 
         if (frame.empty())
@@ -79,7 +81,7 @@ int main()
         }
 
         // Mat fgMask, fgImg;
-        Mat fgMask, fgImg, faceDetection;
+        Mat fgMask, fgImg, faceDetection, personMask;
         Mat result, bgModel, fgModel, foreground;
         // foreground = Mat(image.size(), CV_8UC3, Scalar(255, 255, 255));
         fgMask = Mat(frame.size(), CV_8UC1, Scalar(0, 0, 0));
@@ -93,6 +95,7 @@ int main()
             Point zoom_lb(faces[i].x + (int)(faces[i].width*1.1), faces[i].y + (int)(faces[i].height*1.1));
             Point zoom_tr(faces[i].x - (int)(faces[i].width*0.1), faces[i].y - (int)(faces[i].height*0.1));
 
+
             if (i == nearest_idx)
                 rectangle(faceDetection, lb, tr, Scalar(0, 255, 0), 3, 4, 0);
             else if (i == farthest_idx)
@@ -102,25 +105,35 @@ int main()
                 rectangle(faceDetection, lb, tr, Scalar(0, 235, 255), 3, 4, 0);
             }
             // 그랩컷 느림; 
-            grabCut(frame, result, Rect(zoom_lb, zoom_tr), bgModel, fgModel, 2, GC_INIT_WITH_RECT);
-            compare(result, GC_PR_FGD, result, CMP_EQ);
-            fgMask += result;
+            // grabCut(frame, result, Rect(zoom_lb, zoom_tr), bgModel, fgModel, 2, GC_INIT_WITH_RECT);
+            // compare(result, GC_PR_FGD, result, CMP_EQ);
+            // fgMask += result;
             
             // 사각형 마스크 따기 
-            // rectangle(fgMask, Rect(zoom_lb, zoom_tr), Scalar(255), -1, 8 , 0);
+            rectangle(fgMask, Rect(zoom_lb, zoom_tr), Scalar(255), -1, 8 , 0);
         }
         // ************* f mode *******************
 
+        // 
+        frame.copyTo(fgImg,personMask);
+        Mat foregroundMask,foregroundImg;
+        foregroundMask.create(frame.size(), frame.type());
+        bg_model->apply(fgImg, foregroundMask);
+        GaussianBlur(foregroundMask, foregroundMask, Size(13, 13), 3.5, 3.5);
+        threshold(foregroundMask, foregroundMask, 50, 255, THRESH_BINARY);
+        foregroundImg = Scalar::all(0);
+        frame.copyTo(foregroundImg, foregroundMask);
+        imshow("masked person", foregroundImg);
 
         // 그랩 컷 사용 코드 
         // cvtColor(fgMask, fgMask, CV_GRAY2BGR); 
-        frame.copyTo(fgImg,fgMask);
-        resize(storm_frame, storm_frame, Size(frame.cols, frame.rows));
-        fgMask = 255 - fgMask;
-        Mat for_bg;
-        storm_frame.copyTo(for_bg, fgMask);
-        for_bg += fgImg;
-        imshow("in grapcut img", for_bg);
+        // frame.copyTo(fgImg,fgMask);
+        // resize(storm_frame, storm_frame, Size(frame.cols, frame.rows));
+        // fgMask = 255 - fgMask;
+        // Mat for_bg;
+        // storm_frame.copyTo(for_bg, fgMask);
+        // for_bg += fgImg;
+        // imshow("in grapcut img", for_bg);
         // imshow("result", fgImg);
 
         // inRange를 써봅시다
@@ -147,7 +160,7 @@ int main()
         
 
         // compare(result, GC_PR_FGD, result, CMP_EQ);
-        imshow("Face Detection", faceDetection);
+        // imshow("Face Detection", faceDetection);
         // waitKey();
         if (waitKey(33) == 27)
             break;

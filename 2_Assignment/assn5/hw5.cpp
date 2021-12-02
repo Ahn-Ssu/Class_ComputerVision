@@ -41,7 +41,7 @@ int main(){
 
     while(1){
         
-
+        cout << recive << endl;
         if (recive == 27){cout << "ESC enter "<<recive << endl; break;}
 
         if (recive == 114){ cout << "r enter "<<recive << endl;

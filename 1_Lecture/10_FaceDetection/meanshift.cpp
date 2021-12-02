@@ -48,7 +48,7 @@ void onMouse(int event, int x, int y, int flags, void* param){
     }
 }
 int main(){
-    VideoCapture cap(0);
+    VideoCapture cap("/Users/ahn_ssu/git/Class_ComputerVision/src/Faces.mp4");
     CallbackParam param;
     Mat frame, m_backproj, hsv;
     Mat m_model3d;

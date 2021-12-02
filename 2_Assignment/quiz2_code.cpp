@@ -8,12 +8,12 @@ using namespace std;
 using namespace dnn;
 
 int main(int argc, char** argv){
-    String modelConfiguration = "/Users/ahn_ssu/git/Class_ComputerVision/src/deep/fromSITE/yolov2-tiny.cfg";
-    String modelBinary = "/Users/ahn_ssu/git/Class_ComputerVision/src/deep/fromSITE/yolov2-tiny.weights";
+    String modelConfiguration = "/Users/ahn_ssu/git/Class_ComputerVision/src/deep/fromSITE/yolov2.cfg";
+    String modelBinary = "/Users/ahn_ssu/git/Class_ComputerVision/src/deep/fromSITE/yolov2.weights";
 
     Net net = readNetFromDarknet(modelConfiguration, modelBinary);
 
-    VideoCapture cap("/Users/ahn_ssu/git/Class_ComputerVision/src/Faces.mp4");
+    VideoCapture cap("/Users/ahn_ssu/git/Class_ComputerVision/src/Quiz2 Video.mp4");
 
     vector <String> classNamesVec;
     ifstream classNamesFile("/Users/ahn_ssu/git/Class_ComputerVision/src/deep/coco.names");
@@ -36,23 +36,29 @@ int main(int argc, char** argv){
 
         // Convert Mat to batch of images
         
-        Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(416, 416), Scalar(), true, false);
+        Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(800, 800), Scalar(), true, false);
         net.setInput(inputBlob, "data");
         Mat detectionMat = net.forward("detection_out");
 
         float confidenceThreshold = 0.12; // by default
-
+        int count_person = 0;
+        int count_ball = 0;
         for (int i= 0 ; i< detectionMat.rows; i++){
             const int probability_index = 5;
             const int probability_size = detectionMat.cols - probability_index;
             float *prob_array_ptr = &detectionMat.at<float>(i, probability_index);
             size_t objectClass = max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
+            // obejct class { 0:person, 32:sport ball}
+
+            if (objectClass == 32) count_ball++;
 
             // prediction probability of each class
             float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
 
             // for drawing labels with name and confidence
             if ( confidence > confidenceThreshold) {
+                if (objectClass == 0) count_person ++;
+
                 float x_center = detectionMat.at<float>(i, 0) * frame.cols;
                 float y_center = detectionMat.at<float>(i, 1) * frame.rows;
                 float width = detectionMat.at<float>(i, 2) * frame.cols;
@@ -64,16 +70,11 @@ int main(int argc, char** argv){
                 Scalar object_roi_color(0, 255, 0);
 
                 rectangle(frame, object, object_roi_color);
-                String className = objectClass < classNamesVec.size() ? classNamesVec[objectClass] : cv::format("unknow(%d)", objectClass);
-                String label = format("%s : %.2f", className.c_str(), confidence);
-                int baseLine = 0;
-
-                Size labelSize = getTextSize(label, FONT_HERSHEY_COMPLEX, 0.5, 1, &baseLine);
-
-                rectangle(frame, Rect(p1, Size(labelSize.width, labelSize.height + baseLine)), object_roi_color, FILLED);
-                putText(frame, label, p1 + Point(0, labelSize.height), FONT_HERSHEY_COMPLEX, 0.5, Scalar(0,0,0));
             }
+
         }
+        putText(frame, format("# of person = %d", count_person), Point(50,30), FONT_HERSHEY_SIMPLEX, 1, Scalar(98, 128, 0), 2, CV_AA);
+        putText(frame, format("# of ball   = %d", count_ball), Point(50,70), FONT_HERSHEY_SIMPLEX, 1, Scalar(98, 128, 0), 2, CV_AA);
         imshow("YOLO: Detections", frame);
         if( waitKey(1) >= 0) break;
     }

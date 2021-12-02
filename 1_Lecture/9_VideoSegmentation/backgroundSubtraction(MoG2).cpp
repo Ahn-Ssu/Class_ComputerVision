@@ -8,10 +8,14 @@ using namespace std;
 int main(){
     Ptr<BackgroundSubtractor> bg_model = createBackgroundSubtractorMOG2();
     Mat backgroundImg, image,  foregroundMask, foregroundImg;
-    VideoCapture cap("/Users/ahn_ssu/git/Class_ComputerVision/src/background.mp4");
+    VideoCapture cap("/Users/ahn_ssu/git/Class_ComputerVision/src/Faces.mp4");
 
+    float learning_rate = 0.5f ;
+    int cnt = 1 ;
     while(true){
         cap >> image;
+        if(image.empty()) break;
+
         resize(image, image, Size(640, 480));
 
 
@@ -20,19 +24,14 @@ int main(){
 
         // image: Next video frame. Floating point frame will be used without scaling and should be in range [0, 255]
         // foregroundMask: The output foreground mask as an 8-bit binary image.
+        cnt ++;
         bg_model -> apply(image, foregroundMask);
-        GaussianBlur(foregroundMask, foregroundMask, Size(11, 11), 3.5, 3.5);
-        threshold(foregroundMask, foregroundMask, 10, 255, THRESH_BINARY);
+        GaussianBlur(foregroundMask, foregroundMask, Size(13, 13), 3.5, 3.5);
+        threshold(foregroundMask, foregroundMask, 50, 255, THRESH_BINARY);
         foregroundImg = Scalar::all(0);
         image.copyTo(foregroundImg, foregroundMask);
-        // backgroundImg: The output background image.
-        bg_model->getBackgroundImage(backgroundImg);
 
-        imshow("foreground mask", foregroundMask);
         imshow("foreground image", foregroundImg);
-
-        // if(!backgroundImg.empty())
-        //     imshow("mean background image", backgroundImg);
         waitKey(33);
     }
     return 0;

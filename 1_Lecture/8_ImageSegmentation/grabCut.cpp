@@ -7,13 +7,17 @@ using namespace std;
 
 int main(){
     Mat result, bgModel, fgModel, image, foreground;
-    image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/dog.png");
+    image = imread("/Users/ahn_ssu/git/Class_ComputerVision/src/faceCapture.png");
+    resize(image, image, Size(1200, 800));
 
     // inner rectangle which includes foreground 
-    Rect rectangle(65, 0, 170, 230);
-    grabCut(image, result, rectangle, bgModel, fgModel, 10, GC_INIT_WITH_RECT);
+    Rect Rect(480, 370, 180, 300);
+    // Rect rect = Rect(10, 10, 100, 100);
+    rectangle(image, Rect, Scalar(0,255,0), 4,8,0);
+    
+    grabCut(image, result, Rect, bgModel, fgModel, 20, GC_INIT_WITH_RECT);
     compare(result, GC_PR_FGD, result, CMP_EQ);
-    foreground = Mat(image.size(), CV_8UC3, Scalar(255, 255, 255));
+    foreground = Mat(image.size(), CV_8UC3, Scalar(0, 0, 0));
 
     image.copyTo(foreground, result);
 

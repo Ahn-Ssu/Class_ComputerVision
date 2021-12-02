@@ -6,7 +6,7 @@ using namespace cv;
 using namespace std;
 
 int main(){
-    VideoCapture capture("/Users/ahn_ssu/git/Class_ComputerVision/src/background.mp4");
+    VideoCapture capture("/Users/ahn_ssu/git/Class_ComputerVision/src/Faces.mp4");
     Mat background, image, gray, result, foregroundMask, foregroundImg;
 
 
@@ -23,6 +23,7 @@ int main(){
         absdiff(background, gray, foregroundMask);
         threshold(foregroundMask, foregroundMask, 50, 255, CV_THRESH_BINARY);
         foregroundMask.copyTo(foregroundImg);
+        // cout << "Channels :" << foregroundMask.channels() << endl;
         gray.copyTo(foregroundImg, foregroundMask);
 
         imshow("foregroundImg", foregroundImg);

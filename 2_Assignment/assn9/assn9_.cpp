@@ -35,9 +35,9 @@ int main()
         storm_cap >> storm_frame;
         storm_cap >> storm_frame;
         storm_cap >> storm_frame;
-        storm_cap >> storm_frame;
 
         // resize(frame, frame, Size(640, 360));
+        // resize(frame, frame, Size(960, 480));
         
 
         if (frame.empty())
@@ -102,48 +102,48 @@ int main()
                 rectangle(faceDetection, lb, tr, Scalar(0, 235, 255), 3, 4, 0);
             }
             // 그랩컷 느림; 
-            grabCut(frame, result, Rect(zoom_lb, zoom_tr), bgModel, fgModel, 2, GC_INIT_WITH_RECT);
-            compare(result, GC_PR_FGD, result, CMP_EQ);
-            fgMask += result;
+            // grabCut(frame, result, Rect(zoom_lb, zoom_tr), bgModel, fgModel, 2, GC_INIT_WITH_RECT);
+            // compare(result, GC_PR_FGD, result, CMP_EQ);
+            // fgMask += result;
             
             // 사각형 마스크 따기 
-            // rectangle(fgMask, Rect(zoom_lb, zoom_tr), Scalar(255), -1, 8 , 0);
+            rectangle(fgMask, Rect(zoom_lb, zoom_tr), Scalar(255), -1, 8 , 0);
         }
         // ************* f mode *******************
 
 
         // 그랩 컷 사용 코드 
         // cvtColor(fgMask, fgMask, CV_GRAY2BGR); 
-        frame.copyTo(fgImg,fgMask);
-        resize(storm_frame, storm_frame, Size(frame.cols, frame.rows));
-        fgMask = 255 - fgMask;
-        Mat for_bg;
-        storm_frame.copyTo(for_bg, fgMask);
-        for_bg += fgImg;
-        imshow("in grapcut img", for_bg);
+        // frame.copyTo(fgImg,fgMask);
+        // resize(storm_frame, storm_frame, Size(frame.cols, frame.rows));
+        // fgMask = 255 - fgMask;
+        // Mat for_bg;
+        // storm_frame.copyTo(for_bg, fgMask);
+        // for_bg += fgImg;
+        // imshow("in grapcut img", for_bg);
         // imshow("result", fgImg);
 
         // inRange를 써봅시다
         // 1) 마스크에 의해서 이미지를 먼저 추출 
-        // frame.copyTo(fgImg, fgMask);
+        frame.copyTo(fgImg, fgMask);
 
-        // // 2) 추출한 이미지 YcrCb로 변환하고, 피부색 필터 적용해서 inRanged_mask 겟
-        // Mat inRanged_mask;
-        // cvtColor(fgImg, fgImg, CV_BGR2YCrCb);
-        // inRange(fgImg, Scalar(20, 133, 77), Scalar(220, 173, 127), inRanged_mask);
+        // 2) 추출한 이미지 YcrCb로 변환하고, 피부색 필터 적용해서 inRanged_mask 겟
+        Mat inRanged_mask;
+        cvtColor(fgImg, fgImg, CV_BGR2YCrCb);
+        inRange(fgImg, Scalar(20, 133, 77), Scalar(220, 173, 127), inRanged_mask);
 
-        // // 3) 얻어낸 살색 마스크로 인물 따내고 YCrCb -> BGR
-        // Mat inRanged_img;
-        // frame.copyTo(inRanged_img, inRanged_mask);
+        // 3) 얻어낸 살색 마스크로 인물 따내고 YCrCb -> BGR
+        Mat inRanged_img;
+        frame.copyTo(inRanged_img, inRanged_mask);
 
-        // 새로운 배경
-        // resize(storm_frame, storm_frame, Size(frame.cols, frame.rows));
-        // inRanged_mask = 255 - inRanged_mask;
+        // 새로운 배경;
+        resize(storm_frame, storm_frame, Size(frame.cols, frame.rows));
+        inRanged_mask = 255 - inRanged_mask;
 
-        // Mat for_bg;
-        // storm_frame.copyTo(for_bg,inRanged_mask);
-        // for_bg += inRanged_img;
-        // imshow("in ranged img", for_bg); // origin video size 720 x 1280
+        Mat for_bg;
+        storm_frame.copyTo(for_bg,inRanged_mask);
+        for_bg += inRanged_img;
+        imshow("in ranged img", for_bg); // origin video size 720 x 1280
         
 
         // compare(result, GC_PR_FGD, result, CMP_EQ);
